@@ -27,7 +27,7 @@ jobs:
         with:
           path: |
             ~/.m2/repository/*/*
-            !~/.m2/repository/org/bonitasoft
+            !~/.m2/repository/org/bonitasoft/**/*-SNAPSHOT
           # different cache if different pom.xml hash
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
