@@ -1,0 +1,43 @@
+name: CI Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository/*/*
+            !~/.m2/repository/org/bonitasoft
+          # different cache if different pom.xml hash
+          key: maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-
+
+      - name: List maven local cache (start)
+        run: if [ -d ~/.m2/repository ]; then tree ~/.m2/repository; fi
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests clean package
+
+      - name: List maven local cache (end)
+        run: if [ -d ~/.m2/repository ]; then tree ~/.m2/repository; fi
