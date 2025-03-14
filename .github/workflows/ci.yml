@@ -41,7 +41,7 @@ jobs:
         run: mvn -B -DskipTests clean package
 
       - name: Remove maven local snapshots
-        run: find ~/.m2/repository/org/bonitasoft/ -type d -name "*-SNAPSHOT" -exec tree {} \;
+        run: find ~/.m2/repository/org/bonitasoft/ -type d -name "*-SNAPSHOT" -exec ls -la {} \;
 
       - name: List maven local cache (end)
         run: if [ -d ~/.m2/repository ]; then tree ~/.m2/repository; fi
